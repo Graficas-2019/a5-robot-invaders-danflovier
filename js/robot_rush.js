@@ -141,6 +141,9 @@ function onDocumentMouseDown(event) {
             robots[CLICKED.parent.name].alive = 0;
         }
     }
+    else{
+        CLICKED = null;
+    }
 }
 
 function run() {
@@ -165,7 +168,7 @@ function startGame() {
     score = 0;
     spawn = 0;
     id = 0;
-    nRobots = 7;
+    nRobots = 4;
 
     if(robots.length > 0){
         for(var i = 0; i < robots.length; i++){
@@ -221,12 +224,12 @@ function generateGame(deltat){
                             updateScore(1);
                             spawn--;
                             scene.remove(robots[i]);
-                            /*
+                            
                             cont ++;
-                            if (cont % 2 == 0){
+                            if (cont % 3 == 0){
                                 nRobots ++;
                                 //console.log("Spawneando ", nRobots - 1, "robots");
-                            }*/
+                            }
 
                         }
                     }
