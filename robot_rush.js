@@ -133,13 +133,17 @@ function onDocumentMouseDown(event) {
             if(!deadAnimator.running) {
                 for(var i = 0; i<= deadAnimator.interps.length - 1; i++) {
                     deadAnimator.interps[i].target = robots[CLICKED.parent.name].rotation;
+                    robots[CLICKED.parent.name].time_dead = Date.now();
+                    robots[CLICKED.parent.name].alive = 0;
                 }
                 playAnimations();
             }
 
-            robots[CLICKED.parent.name].time_dead = Date.now();
-            robots[CLICKED.parent.name].alive = 0;
+            
         }
+    }
+    else{
+        CLICKED = null;
     }
 }
 
@@ -193,10 +197,8 @@ function generateGame(deltat){
         else{
             seconds = 0;
             game = false;
-            if (highScore < score){
-                highScore = score;
-                document.getElementById("high-score").innerHTML = "High Score: " + highScore;
-            }
+
+            updateHighScore();
 
             document.getElementById("timer").innerHTML = "¡GAME FINISHED!";
             document.getElementById("btn-start").hidden = false;
@@ -217,7 +219,7 @@ function generateGame(deltat){
                 robots[i].position.z += 0.015 * deltat;
 
                 if (robots[i].alive == 0){
-                    if(currentTime - robots[i].time_dead > 650)  {
+                    if(currentTime - robots[i].time_dead > 1000)  {
                         if(robots[i].score == 1){
                             robots[i].score = 0;
                             updateScore(1);
@@ -313,7 +315,7 @@ function createDeadAnimation() {
                     },
                 ],
             loop: false,
-            duration: 0.5 * 1000,
+            duration: 1 * 1000,
         });
 }
 
@@ -328,6 +330,13 @@ function updateTimer(seconds) {
 function updateScore(n) {
     score = score + (n);
     document.getElementById("score").innerHTML = "Score: " + score;
+}
+
+function updateHighScore() {
+    if (highScore < score){
+        highScore = score;
+        document.getElementById("high-score").innerHTML = "High Score: " + highScore;
+    }
 }
 
 function getRandomArbitrary(min, max) {
