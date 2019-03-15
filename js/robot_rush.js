@@ -47,7 +47,7 @@ function createScene(canvas) {
 
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
-    camera.position.set(0, 145,120);
+    camera.position.set(0, 135, 95);
     camera.rotation.set(-45,0,0);
 
     scene.add(camera);
@@ -58,15 +58,15 @@ function createScene(canvas) {
     root = new THREE.Object3D;
     
     spotLight = new THREE.SpotLight (0xffffff);
-    spotLight.position.set(-30, 8, -10);
+    spotLight.position.set(-150, 20, -10);
     spotLight.target.position.set(-2, 0, -2);
     root.add(spotLight);
 
     spotLight.castShadow = true;
 
     spotLight.shadow.camera.near = 1;
-    spotLight.shadow.camera.far = 200;
-    spotLight.shadow.camera.fov = 45;
+    spotLight.shadow.camera.far = 300;
+    spotLight.shadow.camera.fov = 5;
     
     spotLight.shadow.mapSize.width = SHADOW_MAP_WIDTH;
     spotLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
@@ -125,25 +125,21 @@ function onDocumentMouseDown(event) {
     raycaster.setFromCamera(mouse, camera);
 
     var intersects = raycaster.intersectObjects(scene.children, true);
-    
+
     if ( intersects.length > 0 ) {
         CLICKED = intersects[ 0 ].object;
-        
+
         if(CLICKED.parent.name != "") {
             if(!deadAnimator.running) {
                 for(var i = 0; i<= deadAnimator.interps.length - 1; i++) {
                     deadAnimator.interps[i].target = robots[CLICKED.parent.name].rotation;
-                    robots[CLICKED.parent.name].time_dead = Date.now();
-                    robots[CLICKED.parent.name].alive = 0;
                 }
                 playAnimations();
             }
 
-            
+            robots[CLICKED.parent.name].time_dead = Date.now();
+            robots[CLICKED.parent.name].alive = 0;
         }
-    }
-    else{
-        CLICKED = null;
     }
 }
 
@@ -169,7 +165,7 @@ function startGame() {
     score = 0;
     spawn = 0;
     id = 0;
-    nRobots = 4;
+    nRobots = 7;
 
     if(robots.length > 0){
         for(var i = 0; i < robots.length; i++){
@@ -225,19 +221,19 @@ function generateGame(deltat){
                             updateScore(1);
                             spawn--;
                             scene.remove(robots[i]);
+                            /*
                             cont ++;
-                            
                             if (cont % 2 == 0){
                                 nRobots ++;
                                 //console.log("Spawneando ", nRobots - 1, "robots");
-                            }
+                            }*/
 
                         }
                     }
                 }
 
                 if (robots[i].alive == 1){
-                    if(robots[i].position.z > 90 ) {   
+                    if(robots[i].position.z > 85 ) {   
                         if(robots[i].score == 1){
                             robots[i].score = 0;
                             updateScore(-1);
@@ -302,20 +298,16 @@ function createDeadAnimation() {
             interps:
                 [
                     { 
-                        keys:[0, 0.166, 0.332, 0.498, 0.644, 0.800, 1], 
+                        keys:[0, 0.5, 1.0 ], 
                         values:[
                             { y : 0.00, z : 0.00 },
-                            { y : 0.15, z : -0.20 },
-                            { y : 0.30, z : -0.40 },
-                            { y : 0.45, z : -0.60 },
-                            { y : 0.60, z : -0.80 },
-                            { y : 0.75, z : -1.00 },
-                            { y : 0.90, z : -1.30 },
+                            { y : 0.50, z : -40 * Math.PI / 180 },
+                            { y : 1.00, z : -85 * Math.PI / 180 },
                             ],
                     },
                 ],
             loop: false,
-            duration: 1 * 1000,
+            duration: 0.8 * 1000,
         });
 }
 
