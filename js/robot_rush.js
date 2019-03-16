@@ -310,7 +310,7 @@ function createDeadAnimation() {
                     },
                 ],
             loop: false,
-            duration: 0.8 * 1000,
+            duration: 1 * 1000,
         });
 }
 
